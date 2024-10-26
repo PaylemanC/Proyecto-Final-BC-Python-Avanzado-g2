@@ -1,0 +1,36 @@
+# Archivos de Python
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+
+# Entorno virtual
+venv/
+.venv/
+.env
+
+# Base de datos
+db.sqlite3
+db.sqlite3-journal
+db.sqlite3-wal
+
+# Django
+*.log
+local_settings.py
+local.py
+*.pot
+
+# Archivos de Playwright
+node_modules/
+playwright-report/
+playwright/driver
+
+# Archivos de IDE/editor
+.idea/
+.vscode/
+
+# Otros archivos
+.coverage
+*.swp
+*~
+.DS_Store
