@@ -21,7 +21,6 @@ local.py
 *.pot
 
 # Archivos de Playwright
-node_modules/
 playwright-report/
 playwright/driver
 
