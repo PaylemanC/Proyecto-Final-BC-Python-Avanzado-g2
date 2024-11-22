@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block title %} Partidos {% endblock %}
+
+{% block content %}
+<p>Partidos:</p>
+<ul>
+{% for party in parties %}
+    <li>{{ party.name }} - {{party.party_code}}</li>
+{% endfor %}
+<ul></ul>
+{% endblock %}
