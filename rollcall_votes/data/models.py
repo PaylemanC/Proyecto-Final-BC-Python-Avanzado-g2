@@ -27,6 +27,7 @@ class Members(models.Model):
     name = models.TextField()
     party_code = models.ForeignKey('Parties', db_column='party_code', on_delete=models.CASCADE)
     state_code = models.ForeignKey('States', db_column='state_code', on_delete=models.CASCADE)
+    image_url = models.TextField(blank=True, null=True)
 
     class Meta:
         managed = False
