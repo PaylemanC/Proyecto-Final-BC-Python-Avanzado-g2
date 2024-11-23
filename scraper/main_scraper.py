@@ -29,6 +29,7 @@ def main(
             db_connection.commit()
             logger.success("Database initialized successfully")
         
+                
         # hr_base_url = "https://clerk.house.gov/Votes"
         # hr_page = get_hr_page(hr_base_url)
         # logger.debug(hr_page)
@@ -41,4 +42,4 @@ def main(
 
     
 if __name__ == "__main__":
-    main(setup_schema=True)
+    main(setup_schema=False)

@@ -36,6 +36,7 @@ CREATE TABLE IF NOT EXISTS states(
 CREATE TABLE IF NOT EXISTS members(
     member_id TEXT PRIMARY KEY,
     name TEXT NOT NULL,
+    image_url TEXT,
     party_code TEXT NOT NULL,
     state_code TEXT NOT NULL,
     FOREIGN KEY (state_code) REFERENCES states(state_code)
