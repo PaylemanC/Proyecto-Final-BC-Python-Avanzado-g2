@@ -3,7 +3,14 @@
 {% block title %}Inicio - Dashboard{% endblock %}
 
 {% block content %}
-<h1>Bienvenido al Dashboard</h1>
+
+<h1>Dashboard</h1>
 
 {{ chart_html|safe }}
+
+{% for member in members %}
+    <li>{{ member.name }} - {{member.party_code}}</li>
+{% endfor %}
+<p>Count: {{ members_count }}</p>
+
 {% endblock %}
