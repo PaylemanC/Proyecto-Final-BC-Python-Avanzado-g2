@@ -6,3 +6,4 @@ altair==5.4.1
 pandas==2.2.3
 python-dotenv==1.0.1
 SQLAlchemy==2.0.36
+requests==2.32.3

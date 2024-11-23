@@ -33,3 +33,5 @@ playwright/driver
 *.swp
 *~
 .DS_Store
+*.csv
+*.csv#
