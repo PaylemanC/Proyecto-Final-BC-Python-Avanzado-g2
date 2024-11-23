@@ -21,3 +21,19 @@ def initiliaze_db(
     """
     with open(sql_file_path, "r") as file:
         db_connection.executescript(file.read())
+
+
+def load_members_data_to_db(
+    db_connection,
+    members_df
+):
+    """
+    Load the members data to the database
+    """
+    values = [tuple(row) for row in members_df.values]
+    logger.info(f"Loading {len(values)} members to the database")
+    insert_query = """
+        INSERT INTO members (member_id, name, image_url, party_code, state_code) 
+        VALUES(?, ?, ?, ?, ?)
+    """
+    db_connection.executemany(insert_query, values)

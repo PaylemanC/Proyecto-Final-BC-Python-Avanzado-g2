@@ -1,7 +1,7 @@
-'''
+"""
 Module that contains functions to get congress data
 like members, bills, etc., from the Congress API
-'''
+"""
 import requests
 import pandas as pd
 from loguru import logger
@@ -100,9 +100,91 @@ def get_members(
     return members_df
 
 
+@logger.catch
+def transform_members_data(
+    members_df: pd.DataFrame
+) -> pd.DataFrame:
+    """
+    Transform the members data to match the 'members' table schema
+    by mapping the party and state to their respective codes
+    """
+    states_codes = {
+        'Alabama': 'AL',
+        'Alaska': 'AK', 
+        'American Samoa': 'AS',
+        'Arizona': 'AZ',
+        'Arkansas': 'AR',
+        'California': 'CA',
+        'Colorado': 'CO',
+        'Connecticut': 'CT',
+        'Delaware': 'DE',
+        'District of Columbia': 'DC',
+        'Florida': 'FL',
+        'Georgia': 'GA',
+        'Guam': 'GU',
+        'Hawaii': 'HI',
+        'Idaho': 'ID',
+        'Illinois': 'IL',
+        'Indiana': 'IN',
+        'Iowa': 'IA',
+        'Kansas': 'KS',
+        'Kentucky': 'KY',
+        'Louisiana': 'LA',
+        'Maine': 'ME',
+        'Maryland': 'MD',
+        'Massachusetts': 'MA',
+        'Michigan': 'MI',
+        'Minnesota': 'MN',
+        'Mississippi': 'MS',
+        'Missouri': 'MO',
+        'Montana': 'MT',
+        'Nebraska': 'NE',
+        'Nevada': 'NV',
+        'New Hampshire': 'NH',
+        'New Jersey': 'NJ',
+        'New Mexico': 'NM',
+        'New York': 'NY',
+        'North Carolina': 'NC',
+        'North Dakota': 'ND',
+        'Northern Mariana Islands': 'MP',
+        'Ohio': 'OH',
+        'Oklahoma': 'OK',
+        'Oregon': 'OR',
+        'Pennsylvania': 'PA',
+        'Puerto Rico': 'PR',
+        'Rhode Island': 'RI',
+        'South Carolina': 'SC',
+        'South Dakota': 'SD',
+        'Tennessee': 'TN',
+        'Texas': 'TX',
+        'Utah': 'UT',
+        'Virgin Islands': 'VI',
+        'Vermont': 'VT',
+        'Virginia': 'VA',
+        'Washington': 'WA',
+        'West Virginia': 'WV',
+        'Wisconsin': 'WI',
+        'Wyoming': 'WY',
+    }
+    
+    parties_codes = {
+        'Democratic': 'D',
+        'Republican': 'R',
+        'Independent': 'I'
+    }
+    
+    members_df['state'] = members_df['state'].map(states_codes)
+    members_df['party'] = members_df['party'].map(parties_codes)
+    
+    return members_df
+
+
 if __name__ == '__main__':
     members :pd.DataFrame = get_members(
         congress_api_key=CONGRESS_API_KEY, 
         congress=CONGRESS
     )
     members.to_csv('members.csv', index=False)
+    
+    members_transformed :pd.DataFrame = transform_members_data(members)
+    members_transformed.to_csv('members_transformed.csv', index=False)
