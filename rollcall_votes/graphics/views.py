@@ -1,9 +1,8 @@
 import altair as alt
 import pandas as pd
-from django.shortcuts import render
 
 
-def chart_view(request):
+def generate_chart():
     data = pd.DataFrame({
         'category': ['A', 'B', 'C', 'D', 'E'],
         'value': [30, 20, 50, 40, 60]
@@ -15,6 +14,4 @@ def chart_view(request):
         tooltip=['category', 'value'] 
     )
     
-    chart_html = chart.to_html()
-    
-    return render(request, 'chart_template.html', {'chart_html': chart_html})
+    return chart.to_html()

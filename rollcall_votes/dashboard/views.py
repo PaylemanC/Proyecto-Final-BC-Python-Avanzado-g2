@@ -1,8 +1,11 @@
 from django.shortcuts import render
+from graphics.views import generate_chart
 
 
 def dashboard(request):
-    return render(request, 'dashboard.html')  
+    chart_html = generate_chart()
+    
+    return render(request, 'dashboard.html', {'chart_html': chart_html})  
 
 
 def rollcall(request):
