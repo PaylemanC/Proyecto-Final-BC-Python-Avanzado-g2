@@ -3,14 +3,6 @@ import pandas as pd
 from django.shortcuts import render
 
 
-def dashboard(request):
-    return render(request, 'dashboard.html')
-
-
-def rollcall(request):
-    return render(request, 'rollcall.html')
-
-
 def chart_view(request):
     data = pd.DataFrame({
         'category': ['A', 'B', 'C', 'D', 'E'],
