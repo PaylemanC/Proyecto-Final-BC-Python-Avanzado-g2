@@ -19,12 +19,56 @@ logger.add(
 
 
 @logger.catch
+def get_congress_info(
+    congress_api_key: str,
+    congress: int
+) -> pd.DataFrame:
+    """
+    Get the information for a given Congress number from the Congress API.
+    """
+    url = f"https://api.congress.gov/v3/congress/{congress}?api_key={congress_api_key}&format=json"
+    response = requests.get(url)
+
+    if response.status_code != 200:
+        raise Exception(f"Error getting congress info: {response.status_code}")
+    
+    data = response.json()
+    congress_info = data.get("congress", {})
+    
+    if not congress_info:
+        raise Exception(f"No congress info found for Congress {congress}")
+    
+    congress_sessions = congress_info.get("sessions")
+    congress_sessions_data = []
+    
+    for session in congress_sessions:
+        session_number = session.get("number")
+        session_start_date = session.get("startDate")
+        session_end_date = session.get("endDate")
+        
+        session_data = {
+            "congress_id": f"{congress}-{session_number}",
+            "session": session_number,
+            "number": congress,
+            "start_date": session_start_date,
+            "end_date": session_end_date
+        }
+        congress_sessions_data.append(session_data)
+    logger.debug(f"Congress sessions data: {congress_sessions_data}")
+        
+    congress_df = pd.DataFrame(congress_sessions_data).drop_duplicates()
+    congress_df.to_csv('congress.csv', index=False)
+    return congress_df
+
+
+@logger.catch
 def get_bills(
     congress_api_key: str,
     congress: int
 ) -> pd.DataFrame:
     """
-     Fetch bills for a given Congress number.
+    Fetch bills for a given Congress number 
+    from the Congress API.
 
     Each bill includes:
     - bill_id
@@ -86,7 +130,7 @@ def get_members(
 ) -> pd.DataFrame:
     """
     Get the members of the Congress
-    for a given congress.
+    for a given congress from the Congress API.
     
     For each member, the following data is fetched:
     - member_id
@@ -242,11 +286,16 @@ def transform_members_data(
 
 
 if __name__ == '__main__':
-    members :pd.DataFrame = get_members(
-        congress_api_key=CONGRESS_API_KEY, 
+    # members :pd.DataFrame = get_members(
+    #     congress_api_key=CONGRESS_API_KEY, 
+    #     congress=CONGRESS
+    # )
+    # members.to_csv('members.csv', index=False)
+    
+    # members_transformed :pd.DataFrame = transform_members_data(members)
+    # members_transformed.to_csv('members_transformed.csv', index=False)
+    
+    congress_info :pd.DataFrame = get_congress_info(
+        congress_api_key=CONGRESS_API_KEY,
         congress=CONGRESS
     )
-    members.to_csv('members.csv', index=False)
-    
-    members_transformed :pd.DataFrame = transform_members_data(members)
-    members_transformed.to_csv('members_transformed.csv', index=False)

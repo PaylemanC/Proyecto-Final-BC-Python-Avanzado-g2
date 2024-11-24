@@ -23,6 +23,22 @@ def initiliaze_db(
         db_connection.executescript(file.read())
 
 
+def load_congress_data_to_db(
+    db_connection,
+    congress_df
+):
+    """
+    Load the congress data to the database
+    """
+    values = [tuple(row) for row in congress_df.values]
+    logger.info(f"Loading {len(values)} records to the 'congress' table")
+    insert_query = """
+        INSERT OR IGNORE INTO congress (congress_id, session, number, start_date, end_date) 
+        VALUES(?, ?, ?, ?, ?)
+    """
+    db_connection.executemany(insert_query, values)
+    
+
 def load_members_data_to_db(
     db_connection,
     members_df
