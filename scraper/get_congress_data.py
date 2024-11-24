@@ -1,7 +1,7 @@
-'''
+"""
 Module that contains functions to get congress data
 like members, bills, etc., from the Congress API
-'''
+"""
 import requests
 import pandas as pd
 from loguru import logger
@@ -19,6 +19,110 @@ logger.add(
 
 
 @logger.catch
+def get_congress_info(
+    congress_api_key: str,
+    congress: int
+) -> pd.DataFrame:
+    """
+    Get the information for a given Congress number from the Congress API.
+    """
+    url = f"https://api.congress.gov/v3/congress/{congress}?api_key={congress_api_key}&format=json"
+    response = requests.get(url)
+
+    if response.status_code != 200:
+        raise Exception(f"Error getting congress info: {response.status_code}")
+    
+    data = response.json()
+    congress_info = data.get("congress", {})
+    
+    if not congress_info:
+        raise Exception(f"No congress info found for Congress {congress}")
+    
+    congress_sessions = congress_info.get("sessions")
+    congress_sessions_data = []
+    
+    for session in congress_sessions:
+        session_number = session.get("number")
+        session_start_date = session.get("startDate")
+        session_end_date = session.get("endDate")
+        
+        session_data = {
+            "congress_id": f"{congress}-{session_number}",
+            "session": session_number,
+            "number": congress,
+            "start_date": session_start_date,
+            "end_date": session_end_date
+        }
+        congress_sessions_data.append(session_data)
+    logger.debug(f"Congress sessions data: {congress_sessions_data}")
+        
+    congress_df = pd.DataFrame(congress_sessions_data).drop_duplicates()
+    return congress_df
+
+
+@logger.catch
+def get_bills(
+    congress_api_key: str,
+    congress: int
+) -> pd.DataFrame:
+    """
+    Fetch bills for a given Congress number 
+    from the Congress API.
+
+    Each bill includes:
+    - bill_id
+    - number
+    - type
+    - description (from 'title')
+    
+    Params:
+        congress_api_key (str): The API key for the Congress API
+        congress (int): The Congress number
+    
+    Returns:
+        pd.DataFrame: A DataFrame containing the bills data.
+    """
+    url = f"https://api.congress.gov/v3/bill/{congress}?api_key={congress_api_key}&format=json"
+    response = requests.get(url)
+
+    if response.status_code != 200:
+        raise Exception(f"Error getting bills: {response.status_code}")
+    
+    data = response.json()
+    bills_response: list = data.get("bills", [])
+    
+    bills_data: list = []
+    
+    for bill in bills_response:
+        try:
+            bill_number = bill.get("number")
+            bill_type = bill.get("type")
+            bill_description = bill.get("title")
+            
+            bill_data = {
+                "bill_id": f"{bill_number}-{bill_type}",  
+                "number": bill_number,
+                "type": bill_type,
+                "description": bill_description,
+            }
+            bills_data.append(bill_data)
+        except KeyError as ke:
+            logger.error(f"Key: {ke} not found in bill: {bill.get('number')}")
+            continue
+
+    if not bills_data:
+        logger.warning(f"No bills found for Congress {congress}")
+    else:
+        logger.info(f"Retrieved {len(bills_data)} bills for Congress {congress}")
+
+    #TODO: Add pagination to extract all bills for a congress
+    
+    bills_df = pd.DataFrame(bills_data)
+    logger.success(f"Bills data processed successfully")
+    return bills_df
+
+
+@logger.catch
 def get_members(
     congress_api_key: str,
     congress: int, 
@@ -27,7 +131,7 @@ def get_members(
 ) -> pd.DataFrame:
     """
     Get the members of the Congress
-    for a given congress.
+    for a given congress from the Congress API.
     
     For each member, the following data is fetched:
     - member_id
@@ -62,10 +166,13 @@ def get_members(
                 member_data = {
                     'member_id': member['bioguideId'],
                     'name': member['name'],
-                    'image_url': member['depiction']['imageUrl'],
                     'party': member['partyName'],
                     'state': member['state']
                 }
+                
+                default_image_url = "https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg"
+                
+                member_data['image_url'] = member.get('depiction', {}).get('imageUrl', default_image_url)
             except KeyError as ke:
                 logger.error(f"Key: {ke} not found for member: {member['bioguideId']}")
                 continue
@@ -100,9 +207,87 @@ def get_members(
     return members_df
 
 
-if __name__ == '__main__':
-    members :pd.DataFrame = get_members(
-        congress_api_key=CONGRESS_API_KEY, 
+@logger.catch
+def transform_members_data(
+    members_df: pd.DataFrame
+) -> pd.DataFrame:
+    """
+    Transform the members data to match the 'members' table schema
+    by mapping the party and state to their respective codes
+    """
+    states_codes = {
+        'Alabama': 'AL',
+        'Alaska': 'AK', 
+        'American Samoa': 'AS',
+        'Arizona': 'AZ',
+        'Arkansas': 'AR',
+        'California': 'CA',
+        'Colorado': 'CO',
+        'Connecticut': 'CT',
+        'Delaware': 'DE',
+        'District of Columbia': 'DC',
+        'Florida': 'FL',
+        'Georgia': 'GA',
+        'Guam': 'GU',
+        'Hawaii': 'HI',
+        'Idaho': 'ID',
+        'Illinois': 'IL',
+        'Indiana': 'IN',
+        'Iowa': 'IA',
+        'Kansas': 'KS',
+        'Kentucky': 'KY',
+        'Louisiana': 'LA',
+        'Maine': 'ME',
+        'Maryland': 'MD',
+        'Massachusetts': 'MA',
+        'Michigan': 'MI',
+        'Minnesota': 'MN',
+        'Mississippi': 'MS',
+        'Missouri': 'MO',
+        'Montana': 'MT',
+        'Nebraska': 'NE',
+        'Nevada': 'NV',
+        'New Hampshire': 'NH',
+        'New Jersey': 'NJ',
+        'New Mexico': 'NM',
+        'New York': 'NY',
+        'North Carolina': 'NC',
+        'North Dakota': 'ND',
+        'Northern Mariana Islands': 'MP',
+        'Ohio': 'OH',
+        'Oklahoma': 'OK',
+        'Oregon': 'OR',
+        'Pennsylvania': 'PA',
+        'Puerto Rico': 'PR',
+        'Rhode Island': 'RI',
+        'South Carolina': 'SC',
+        'South Dakota': 'SD',
+        'Tennessee': 'TN',
+        'Texas': 'TX',
+        'Utah': 'UT',
+        'Virgin Islands': 'VI',
+        'Vermont': 'VT',
+        'Virginia': 'VA',
+        'Washington': 'WA',
+        'West Virginia': 'WV',
+        'Wisconsin': 'WI',
+        'Wyoming': 'WY',
+    }
+    
+    parties_codes = {
+        'Democratic': 'D',
+        'Republican': 'R',
+        'Independent': 'I'
+    }
+    
+    members_df['state'] = members_df['state'].map(states_codes)
+    members_df['party'] = members_df['party'].map(parties_codes)
+    
+    return members_df
+
+
+if __name__ == '__main__':    
+    congress_info :pd.DataFrame = get_congress_info(
+        congress_api_key=CONGRESS_API_KEY,
         congress=CONGRESS
     )
-    members.to_csv('members.csv', index=False)

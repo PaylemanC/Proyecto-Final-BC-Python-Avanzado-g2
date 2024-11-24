@@ -2,7 +2,9 @@
 CREATE TABLE IF NOT EXISTS congress(
     congress_id TEXT PRIMARY KEY,
     session TEXT NOT NULL,
-    number INTEGER NOT NULL
+    number INTEGER NOT NULL,
+    start_date TEXT,
+    end_date TEXT
 ) STRICT;
 
 CREATE TABLE IF NOT EXISTS bills(
@@ -53,11 +55,7 @@ CREATE TABLE IF NOT EXISTS votes(
 ) STRICT;
 
 -- Insert queries
-INSERT INTO congress (congress_id, session, number) VALUES ('118-1', '1st', '118');
-INSERT INTO congress (congress_id, session, number) VALUES ('118-2', '2nd', '118');
-
-
-INSERT INTO parties (party_code, name) VALUES ('D', 'Democrat');
+INSERT INTO parties (party_code, name) VALUES ('D', 'Democratic');
 INSERT INTO parties (party_code, name) VALUES ('R', 'Republican');
 INSERT INTO parties (party_code, name) VALUES ('I', 'Independent');
 
@@ -66,12 +64,15 @@ INSERT INTO states (state_code, name) VALUES ('AL', 'Alabama');
 INSERT INTO states (state_code, name) VALUES ('AK', 'Alaska');
 INSERT INTO states (state_code, name) VALUES ('AZ', 'Arizona');
 INSERT INTO states (state_code, name) VALUES ('AR', 'Arkansas');
+INSERT INTO states (state_code, name) VALUES ('AS', 'American Samoa');
 INSERT INTO states (state_code, name) VALUES ('CA', 'California');
 INSERT INTO states (state_code, name) VALUES ('CO', 'Colorado');
 INSERT INTO states (state_code, name) VALUES ('CT', 'Connecticut');
 INSERT INTO states (state_code, name) VALUES ('DE', 'Delaware');
+INSERT INTO states (state_code, name) VALUES ('DC', 'District of Columbia');
 INSERT INTO states (state_code, name) VALUES ('FL', 'Florida');
 INSERT INTO states (state_code, name) VALUES ('GA', 'Georgia');
+INSERT INTO states (state_code, name) VALUES ('GU', 'Guam');
 INSERT INTO states (state_code, name) VALUES ('HI', 'Hawaii');
 INSERT INTO states (state_code, name) VALUES ('ID', 'Idaho');
 INSERT INTO states (state_code, name) VALUES ('IL', 'Illinois');
@@ -96,6 +97,7 @@ INSERT INTO states (state_code, name) VALUES ('NM', 'New Mexico');
 INSERT INTO states (state_code, name) VALUES ('NY', 'New York');
 INSERT INTO states (state_code, name) VALUES ('NC', 'North Carolina');
 INSERT INTO states (state_code, name) VALUES ('ND', 'North Dakota');
+INSERT INTO states (state_code, name) VALUES ('MP', 'Northern Mariana Islands');
 INSERT INTO states (state_code, name) VALUES ('OH', 'Ohio');
 INSERT INTO states (state_code, name) VALUES ('OK', 'Oklahoma');
 INSERT INTO states (state_code, name) VALUES ('OR', 'Oregon');
