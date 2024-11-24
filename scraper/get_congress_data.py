@@ -57,7 +57,6 @@ def get_congress_info(
     logger.debug(f"Congress sessions data: {congress_sessions_data}")
         
     congress_df = pd.DataFrame(congress_sessions_data).drop_duplicates()
-    congress_df.to_csv('congress.csv', index=False)
     return congress_df
 
 
@@ -287,16 +286,7 @@ def transform_members_data(
     return members_df
 
 
-if __name__ == '__main__':
-    # members :pd.DataFrame = get_members(
-    #     congress_api_key=CONGRESS_API_KEY, 
-    #     congress=CONGRESS
-    # )
-    # members.to_csv('members.csv', index=False)
-    
-    # members_transformed :pd.DataFrame = transform_members_data(members)
-    # members_transformed.to_csv('members_transformed.csv', index=False)
-    
+if __name__ == '__main__':    
     congress_info :pd.DataFrame = get_congress_info(
         congress_api_key=CONGRESS_API_KEY,
         congress=CONGRESS
