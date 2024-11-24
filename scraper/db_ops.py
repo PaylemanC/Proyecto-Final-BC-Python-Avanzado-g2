@@ -33,8 +33,13 @@ def load_congress_data_to_db(
     values = [tuple(row) for row in congress_df.values]
     logger.info(f"Loading {len(values)} records to the 'congress' table")
     insert_query = """
-        INSERT OR IGNORE INTO congress (congress_id, session, number, start_date, end_date) 
+        INSERT INTO congress (congress_id, session, number, start_date, end_date) 
         VALUES(?, ?, ?, ?, ?)
+        ON CONFLICT(congress_id) DO UPDATE SET
+            session = excluded.session,
+            number = excluded.number,
+            start_date = excluded.start_date,
+            end_date = excluded.end_date
     """
     db_connection.executemany(insert_query, values)
     
@@ -49,8 +54,13 @@ def load_members_data_to_db(
     values = [tuple(row) for row in members_df.values]
     logger.info(f"Loading {len(values)} members to the database")
     insert_query = """
-        INSERT OR IGNORE INTO members (member_id, name, image_url, party_code, state_code) 
+        INSERT INTO members (member_id, name, image_url, party_code, state_code) 
         VALUES(?, ?, ?, ?, ?)
+        ON CONFLICT(member_id) DO UPDATE SET
+            name = excluded.name,
+            image_url = excluded.image_url,
+            party_code = excluded.party_code,
+            state_code = excluded.state_code
     """
     db_connection.executemany(insert_query, values)
 
@@ -75,7 +85,11 @@ def load_bills_data_to_db(
     logger.info(f"Loading {len(values)} bills to the database")
 
     insert_query = """
-        INSERT OR IGNORE INTO bills (bill_id, number, type, description) 
+        INSERT INTO bills (bill_id, number, type, description) 
         VALUES (?, ?, ?, ?)
+        ON CONFLICT(bill_id) DO UPDATE SET
+            number = excluded.number,
+            type = excluded.type,
+            description = excluded.description
     """
     db_connection.executemany(insert_query, values)

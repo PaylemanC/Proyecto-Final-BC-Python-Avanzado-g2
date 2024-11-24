@@ -1,7 +1,7 @@
 from loguru import logger
 from .utils import get_hr_page
 from .sql_connection import DBConnection
-from config import CONGRESS_API_KEY, CONGRESS
+from config import CONGRESS_API_KEY, CONGRESS, SETUP_SCHEMA
 from logger_config import log_output, log_format, log_level
 from .get_congress_data import (
     get_congress_info,
@@ -71,6 +71,7 @@ def main(
         db_connection.commit()
         logger.success("Members data loaded successfully")
         
+        # Fetch roll calls and votes for the specific congress
         # hr_base_url = "https://clerk.house.gov/Votes"
         # hr_page = get_hr_page(hr_base_url)
         # logger.debug(hr_page)
@@ -83,4 +84,4 @@ def main(
 
     
 if __name__ == "__main__":
-    main(setup_schema=False)
+    main(setup_schema=SETUP_SCHEMA)

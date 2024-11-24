@@ -116,6 +116,8 @@ def get_bills(
     else:
         logger.info(f"Retrieved {len(bills_data)} bills for Congress {congress}")
 
+    #TODO: Add pagination to extract all bills for a congress
+    
     bills_df = pd.DataFrame(bills_data)
     logger.success(f"Bills data processed successfully")
     return bills_df
