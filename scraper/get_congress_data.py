@@ -62,10 +62,13 @@ def get_members(
                 member_data = {
                     'member_id': member['bioguideId'],
                     'name': member['name'],
-                    'image_url': member['depiction']['imageUrl'],
                     'party': member['partyName'],
                     'state': member['state']
                 }
+                
+                default_image_url = "https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg"
+                
+                member_data['image_url'] = member.get('depiction', {}).get('imageUrl', default_image_url)
             except KeyError as ke:
                 logger.error(f"Key: {ke} not found for member: {member['bioguideId']}")
                 continue
