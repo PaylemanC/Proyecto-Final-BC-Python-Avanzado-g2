@@ -2,7 +2,9 @@
 CREATE TABLE IF NOT EXISTS congress(
     congress_id TEXT PRIMARY KEY,
     session TEXT NOT NULL,
-    number INTEGER NOT NULL
+    number INTEGER NOT NULL,
+    start_date TEXT,
+    end_date TEXT
 ) STRICT;
 
 CREATE TABLE IF NOT EXISTS bills(
@@ -53,10 +55,6 @@ CREATE TABLE IF NOT EXISTS votes(
 ) STRICT;
 
 -- Insert queries
-INSERT INTO congress (congress_id, session, number) VALUES ('118-1', '1st', '118');
-INSERT INTO congress (congress_id, session, number) VALUES ('118-2', '2nd', '118');
-
-
 INSERT INTO parties (party_code, name) VALUES ('D', 'Democratic');
 INSERT INTO parties (party_code, name) VALUES ('R', 'Republican');
 INSERT INTO parties (party_code, name) VALUES ('I', 'Independent');
