@@ -19,6 +19,65 @@ logger.add(
 
 
 @logger.catch
+def get_bills(
+    congress_api_key: str,
+    congress: int
+) -> pd.DataFrame:
+    """
+     Fetch bills for a given Congress number.
+
+    Each bill includes:
+    - bill_id
+    - number
+    - type
+    - description (from 'title')
+    
+    Params:
+        congress_api_key (str): The API key for the Congress API
+        congress (int): The Congress number
+    
+    Returns:
+        pd.DataFrame: A DataFrame containing the bills data.
+    """
+    url = f"https://api.congress.gov/v3/bill/{congress}?api_key={congress_api_key}&format=json"
+    response = requests.get(url)
+
+    if response.status_code != 200:
+        raise Exception(f"Error getting bills: {response.status_code}")
+    
+    data = response.json()
+    bills_response: list = data.get("bills", [])
+    
+    bills_data: list = []
+    
+    for bill in bills_response:
+        try:
+            bill_number = bill.get("number")
+            bill_type = bill.get("type")
+            bill_description = bill.get("title")
+            
+            bill_data = {
+                "bill_id": f"{bill_number}-{bill_type}",  
+                "number": bill_number,
+                "type": bill_type,
+                "description": bill_description,
+            }
+            bills_data.append(bill_data)
+        except KeyError as ke:
+            logger.error(f"Key: {ke} not found in bill: {bill.get('number')}")
+            continue
+
+    if not bills_data:
+        logger.warning(f"No bills found for Congress {congress}")
+    else:
+        logger.info(f"Retrieved {len(bills_data)} bills for Congress {congress}")
+
+    bills_df = pd.DataFrame(bills_data)
+    logger.success(f"Bills data processed successfully")
+    return bills_df
+
+
+@logger.catch
 def get_members(
     congress_api_key: str,
     congress: int, 

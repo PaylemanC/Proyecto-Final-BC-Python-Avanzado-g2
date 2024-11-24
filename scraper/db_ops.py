@@ -37,3 +37,29 @@ def load_members_data_to_db(
         VALUES(?, ?, ?, ?, ?)
     """
     db_connection.executemany(insert_query, values)
+
+
+def load_bills_data_to_db(
+    db_connection,
+    bills_df
+):
+    """
+    Load the bills data to the database.
+    """
+    values = [
+        (
+            row["bill_id"],          
+            row["number"],       
+            row["type"],         
+            row["description"],        
+        )
+        for _, row in bills_df.iterrows()
+    ]
+
+    logger.info(f"Loading {len(values)} bills to the database")
+
+    insert_query = """
+        INSERT OR IGNORE INTO bills (bill_id, number, type, description) 
+        VALUES (?, ?, ?, ?)
+    """
+    db_connection.executemany(insert_query, values)
