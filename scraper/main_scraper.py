@@ -1,11 +1,10 @@
 from loguru import logger
-from utils import get_hr_page
-from sql_connection import DBConnection
+# from .utils import get_hr_page
+from .sql_connection import DBConnection
 from config import CONGRESS_API_KEY, CONGRESS
-from db_ops import initiliaze_db, load_members_data_to_db
+from .db_ops import initiliaze_db, load_members_data_to_db
 from logger_config import log_output, log_format, log_level
-from get_congress_data import get_members, transform_members_data
-
+from .get_congress_data import get_members, transform_members_data
 
 logger.remove()
 logger.add(
