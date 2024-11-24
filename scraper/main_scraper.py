@@ -53,13 +53,13 @@ def main(
         logger.success("Congress data loaded successfully")
         
         # Fetch bills data
-        # bills_df = get_bills(
-        #     congress_api_key=CONGRESS_API_KEY,
-        #     congress=CONGRESS
-        # )
-        # load_bills_data_to_db(db_connection, bills_df)
-        # db_connection.commit()
-        # logger.success("Bills data loaded successfully")
+        bills_df = get_bills(
+            congress_api_key=CONGRESS_API_KEY,
+            congress=CONGRESS
+        )
+        load_bills_data_to_db(db_connection, bills_df)
+        db_connection.commit()
+        logger.success("Bills data loaded successfully")
         
         # Fetch members data
         members_df = get_members(
