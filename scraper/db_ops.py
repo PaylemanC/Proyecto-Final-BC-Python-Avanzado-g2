@@ -33,7 +33,7 @@ def load_members_data_to_db(
     values = [tuple(row) for row in members_df.values]
     logger.info(f"Loading {len(values)} members to the database")
     insert_query = """
-        INSERT INTO members (member_id, name, image_url, party_code, state_code) 
+        INSERT OR IGNORE INTO members (member_id, name, image_url, party_code, state_code) 
         VALUES(?, ?, ?, ?, ?)
     """
     db_connection.executemany(insert_query, values)
