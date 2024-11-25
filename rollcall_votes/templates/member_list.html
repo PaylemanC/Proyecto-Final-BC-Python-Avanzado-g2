@@ -6,4 +6,9 @@
 
 <h1>Lista de miembros/legisladores</h1>
 
+<p>Count: {{ members_count }}</p>
+{% for member in members %}
+    <li>{{ member.name }} </li>
+{% endfor %}
+
 {% endblock %}

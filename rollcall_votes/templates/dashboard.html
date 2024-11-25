@@ -10,9 +10,4 @@
 
 {{ chart_html|safe }}
 
-{% for member in members %}
-    <li>{{ member.name }} - {{member.party_code}}</li>
-{% endfor %}
-<p>Count: {{ members_count }}</p>
-
 {% endblock %}
