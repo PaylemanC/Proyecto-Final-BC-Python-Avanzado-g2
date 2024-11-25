@@ -1,3 +1,9 @@
+@import 'variables.css';
+
+:root {
+    --margin-left: 250px;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -11,4 +17,24 @@ html {
 body {
     font-family: Arial, sans-serif;
     font-size: 1.6rem; 
+}
+
+.sidebar {
+    width: var(--margin-left); 
+    background-color: var(--main-color);
+    position: fixed; 
+    top: 0;
+    left: 0;
+    height: 100%; 
+    display: flex;
+    flex-direction: column; 
+    padding: 32px;
+}
+
+.content {
+    margin-left: var(--margin-left); 
+    padding: 16px;
+    height: 100vh; 
+    overflow-y: auto; 
+    background-color: var(--body-bg-color);
 }
