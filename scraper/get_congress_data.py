@@ -98,12 +98,17 @@ def get_bills(
             bill_number = bill.get("number")
             bill_type = bill.get("type")
             bill_description = bill.get("title")
+            latest_action = bill.get("latestAction", {})
+            action_date = latest_action.get("actionDate", None) 
+            action_text = latest_action.get("text", None) 
             
             bill_data = {
                 "bill_id": f"{bill_number}-{bill_type}",  
                 "number": bill_number,
                 "type": bill_type,
                 "description": bill_description,
+                "action_date": action_date, 
+                "action_text": action_text
             }
             bills_data.append(bill_data)
         except KeyError as ke:

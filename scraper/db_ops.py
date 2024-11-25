@@ -78,6 +78,8 @@ def load_bills_data_to_db(
             row["number"],       
             row["type"],         
             row["description"],        
+            row["action_date"], 
+            row["action_text"],
         )
         for _, row in bills_df.iterrows()
     ]
@@ -85,11 +87,13 @@ def load_bills_data_to_db(
     logger.info(f"Loading {len(values)} bills to the database")
 
     insert_query = """
-        INSERT INTO bills (bill_id, number, type, description) 
-        VALUES (?, ?, ?, ?)
+        INSERT INTO bills (bill_id, number, type, description, action_date, action_text) 
+        VALUES (?, ?, ?, ?, ?, ?)
         ON CONFLICT(bill_id) DO UPDATE SET
             number = excluded.number,
             type = excluded.type,
-            description = excluded.description
+            description = excluded.description,
+            action_date = excluded.action_date,  
+            action_text = excluded.action_text
     """
     db_connection.executemany(insert_query, values)

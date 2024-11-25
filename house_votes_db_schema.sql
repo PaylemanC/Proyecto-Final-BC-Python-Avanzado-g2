@@ -11,7 +11,9 @@ CREATE TABLE IF NOT EXISTS bills(
     bill_id TEXT PRIMARY KEY,
     number INTEGER NOT NULL,
     type TEXT NOT NULL,
-    description TEXT
+    description TEXT,
+    action_date TEXT,  
+    action_text TEXT 
 ) STRICT;
 
 CREATE TABLE IF NOT EXISTS roll_calls(

@@ -6,6 +6,8 @@ class Bills(models.Model):
     number = models.IntegerField()
     type = models.TextField()
     description = models.TextField(blank=True, null=True)
+    action_date = models.TextField(blank=True, null=True)
+    action_text = models.TextField(blank=True, null=True)
 
     class Meta:
         managed = False
