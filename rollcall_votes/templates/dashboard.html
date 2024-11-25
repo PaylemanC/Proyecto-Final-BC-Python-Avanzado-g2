@@ -14,11 +14,16 @@
       <li>{{ bill.type }}: {{ bill.total }}</li>
     {% endfor %}
 </ul>
-<p>Project Types Distribution Chart</p>
-{{ bill_type_chart|safe }}
 
-<p>Bills that becames laws, time:</p>
-{{ law_conversion_chart|safe }}
+{% comment %} <h2>Projects by Type</h2>
+<div id="bill_type_chart">
+    {{ bill_type_chart|safe }}
+</div>  {% endcomment %}
+
+<h2>Law Conversion Over Time</h2>
+<div id="law_conversion_chart">
+    {{ law_conversion_chart|safe }}
+</div>
 
 <p>Last updated bills:</p>
 <table class="table table-hover">
