@@ -33,6 +33,13 @@ def member_list(request):
         'members': members,
         'members_count': members_count
     })
+    
+def bill_list(request):
+    bills = Bills.objects.all().order_by('-action_date')
+    
+    return render(request, 'bill_list.html', {
+        'bills': bills
+    })
 
 def group_laws_by_date():
     laws = Bills.objects.filter(action_text__startswith="Became Public Law No:")
