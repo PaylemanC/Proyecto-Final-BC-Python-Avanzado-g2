@@ -1,5 +1,4 @@
 from loguru import logger
-from .utils import get_hr_page
 from .sql_connection import DBConnection
 from config import CONGRESS_API_KEY, CONGRESS, SETUP_SCHEMA
 from logger_config import log_output, log_format, log_level
@@ -70,11 +69,6 @@ def main(
         load_members_data_to_db(db_connection, members_df_transformed)
         db_connection.commit()
         logger.success("Members data loaded successfully")
-        
-        # Fetch roll calls and votes for the specific congress
-        # hr_base_url = "https://clerk.house.gov/Votes"
-        # hr_page = get_hr_page(hr_base_url)
-        # logger.debug(hr_page)
     except Exception as e:
         db_connection.rollback()
         logger.exception(f"Error during the execution: {e}")

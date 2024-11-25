@@ -1,5 +1,4 @@
 Django==5.1.2
-playwright==1.48.0
 ruff==0.7.3
 loguru==0.7.2
 altair==5.4.1
