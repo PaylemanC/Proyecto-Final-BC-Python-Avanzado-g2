@@ -151,6 +151,8 @@ def get_bills(
         logger.success(f"Retrieved a total of {len(bills_final_data)} bills for Congress {congress}.")
     
     bills_df = pd.DataFrame(bills_final_data)
+    bills_df = bills_df.sort_values(by="action_date", ascending=True)
+    
     return bills_df
 
 
