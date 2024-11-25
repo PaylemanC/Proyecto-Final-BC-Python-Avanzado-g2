@@ -63,7 +63,9 @@ def get_congress_info(
 @logger.catch
 def get_bills(
     congress_api_key: str,
-    congress: int
+    congress: int,
+    offset: int = 0,
+    limit: int = 50
 ) -> pd.DataFrame:
     """
     Fetch bills for a given Congress number 
@@ -78,52 +80,77 @@ def get_bills(
     Params:
         congress_api_key (str): The API key for the Congress API
         congress (int): The Congress number
+        offset (int): The offset for the API request
+        limit (int): The limit for the API request
     
     Returns:
         pd.DataFrame: A DataFrame containing the bills data.
     """
-    url = f"https://api.congress.gov/v3/bill/{congress}?api_key={congress_api_key}&format=json"
+    url = f"https://api.congress.gov/v3/bill/{congress}?api_key={congress_api_key}&format=json&offset={offset}&limit={limit}"
+    max_records = 850
+    
     response = requests.get(url)
-
     if response.status_code != 200:
         raise Exception(f"Error getting bills: {response.status_code}")
     
     data = response.json()
+    response_count = data.get('pagination', {}).get('count', 0)
+    logger.debug(f"Total bills available: {response_count}")
+    
     bills_response: list = data.get("bills", [])
+    bills_final_data: list = []
     
-    bills_data: list = []
-    
-    for bill in bills_response:
-        try:
-            bill_number = bill.get("number")
-            bill_type = bill.get("type")
-            bill_description = bill.get("title")
-            latest_action = bill.get("latestAction", {})
-            action_date = latest_action.get("actionDate", None) 
-            action_text = latest_action.get("text", None) 
-            
-            bill_data = {
-                "bill_id": f"{bill_number}-{bill_type}",  
-                "number": bill_number,
-                "type": bill_type,
-                "description": bill_description,
-                "action_date": action_date, 
-                "action_text": action_text
-            }
-            bills_data.append(bill_data)
-        except KeyError as ke:
-            logger.error(f"Key: {ke} not found in bill: {bill.get('number')}")
-            continue
+    def get_bill_data(bills_response: list[dict]) -> None:
+        for bill in bills_response:
+            try:
+                bill_number = bill.get("number")
+                bill_type = bill.get("type")
+                bill_description = bill.get("title")
+                latest_action = bill.get("latestAction", {})
+                action_date = latest_action.get("actionDate", None)
+                action_text = latest_action.get("text", None)
 
-    if not bills_data:
+                bill_data = {
+                    "bill_id": f"{bill_number}-{bill_type}",
+                    "number": bill_number,
+                    "type": bill_type,
+                    "description": bill_description,
+                    "action_date": action_date,
+                    "action_text": action_text
+                }
+                bills_final_data.append(bill_data)
+            except KeyError as ke:
+                logger.error(f"Key: {ke} not found for bill: {bill.get('number')}")
+                continue
+    
+    get_bill_data(bills_response)
+    logger.info(f"Processed {len(bills_final_data)} of {response_count} bills (850 MAX).")
+    
+    while len(bills_final_data) < max_records:
+        offset += limit
+        next_url = data.get("pagination", {}).get("next", None)
+        
+        if not next_url:
+            break
+        
+        next_url += f"&api_key={congress_api_key}"
+        response = requests.get(next_url)
+        
+        if response.status_code != 200:
+            raise Exception(f"Error getting bills at offset {offset}. Status code: {response.status_code}")
+        
+        data = response.json()
+        bills_response = data.get("bills", [])
+        get_bill_data(bills_response)
+        
+        logger.info(f"Processed {len(bills_final_data)} bills.")
+    
+    if not bills_final_data:
         logger.warning(f"No bills found for Congress {congress}")
     else:
-        logger.info(f"Retrieved {len(bills_data)} bills for Congress {congress}")
-
-    #TODO: Add pagination to extract all bills for a congress
+        logger.success(f"Retrieved a total of {len(bills_final_data)} bills for Congress {congress}.")
     
-    bills_df = pd.DataFrame(bills_data)
-    logger.success(f"Bills data processed successfully")
+    bills_df = pd.DataFrame(bills_final_data)
     return bills_df
 
 
