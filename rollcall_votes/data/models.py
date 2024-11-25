@@ -16,6 +16,8 @@ class Congress(models.Model):
     congress_id = models.TextField(primary_key=True)
     session = models.TextField()
     number = models.IntegerField()
+    start_date = models.TextField(blank=True, null=True)
+    end_date = models.TextField(blank=True, null=True)
 
     class Meta:
         managed = False
