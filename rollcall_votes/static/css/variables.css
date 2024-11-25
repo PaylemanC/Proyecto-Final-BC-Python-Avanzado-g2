@@ -1,4 +1,6 @@
 :root {
     --body-bg-color: #F2F4F6;
-    --main-color: #1F2937; 
+    --main-color: #1f2937;
+    --main-hover: #374151;
+    --sidebar-tcolor: white;
 }

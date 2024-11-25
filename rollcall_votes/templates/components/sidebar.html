@@ -1,4 +1,12 @@
 <div class="sidebar">
-    <a href="{% url 'dashboard' %}">Inicio</a>
-    <a href="{% url 'member_list' %}">Legisladores</a>
+    <ul>
+        <li class="link-item"><a href="{% url 'dashboard' %}" class="link-url">
+            <i class="bi bi-pie-chart-fill"></i>
+            <span >Dashboard</span>
+        </a></li>
+        <li class="link-item"><a href="{% url 'member_list' %}" class="link-url">
+            <i class="bi bi-person-fill"></i>
+            <span>Members</span>
+        </a></li>
+    </ul>
 </div>
