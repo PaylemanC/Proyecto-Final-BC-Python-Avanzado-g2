@@ -51,7 +51,17 @@ def load_members_data_to_db(
     """
     Load the members data to the database
     """
-    values = [tuple(row) for row in members_df.values]
+    values = [
+        (
+            row["member_id"],
+            row["name"],
+            row["image_url"],
+            row["party"],
+            row["state"]
+        )
+        for _, row in members_df.iterrows()
+    ]
+    
     logger.info(f"Loading {len(values)} members to the database")
     insert_query = """
         INSERT INTO members (member_id, name, image_url, party_code, state_code) 

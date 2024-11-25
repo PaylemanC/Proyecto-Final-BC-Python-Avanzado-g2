@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Inicio - Dashboard{% endblock %}
 
@@ -9,14 +10,15 @@
 <div class="card-members--container">
     {% for member in members %}
     <div class="card-members card" style="width: 18rem;">
-        <img src="..." class="card-img-top" alt="...">
+      <img src="{{ member.image_url }}" alt="{{member.name}} Image">
+        <img src="" class="card-img-top" alt="...">
         <div class="card-body">
           <h5 class="card-title">{{member.name}}</h5>
           <p class="card-text">{{member.member_id}}.</p>
         </div>
         <ul class="list-group list-group-flush">
-          <li class="list-group-item">Party</li>
-          <li class="list-group-item">State</li>
+          <li class="list-group-item">{{member.party_code}}</li>
+          <li class="list-group-item">{{member.state_code}}</li>
         </ul>
       </div>
     {% endfor %}
