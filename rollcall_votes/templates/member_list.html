@@ -6,8 +6,20 @@
 
 <h1>Members</h1>
 
-{% for member in members %}
-    <li>{{ member.name }} </li>
-{% endfor %}
+<div class="card-members--container">
+    {% for member in members %}
+    <div class="card-members card" style="width: 18rem;">
+        <img src="..." class="card-img-top" alt="...">
+        <div class="card-body">
+          <h5 class="card-title">{{member.name}}</h5>
+          <p class="card-text">{{member.member_id}}.</p>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">Party</li>
+          <li class="list-group-item">State</li>
+        </ul>
+      </div>
+    {% endfor %}
+</div>
 
 {% endblock %}
