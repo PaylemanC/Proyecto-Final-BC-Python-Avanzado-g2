@@ -6,6 +6,39 @@
 
 {% block content %}
 
-{{ chart_html|safe }}
+<p>Members count: {{members_count}}</p>
+<p>{{laws_count}} Bills became law</p>
+<p>Bills by type</p>
+<ul>
+    {% for bill in bills_by_type %}
+      <li>{{ bill.type }}: {{ bill.total }}</li>
+    {% endfor %}
+</ul>
+<p>Project Types Distribution Chart</p>
+{{ bill_type_chart|safe }}
+<p>Last updated bills:</p>
+<table class="table table-hover">
+    <thead class="thead-light">
+        <tr>
+            <th class="border-bottom">#</th>
+            <th class="border-bottom">Type</th>
+            <th class="border-bottom">Last update</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for bill in last_bills %}
+        <tr>
+            <td>{{ bill.number }}</td>
+            <td>{{ bill.description }}</td>
+            <td>{{ bill.action_text }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="3">No bills found</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
 
 {% endblock %}
