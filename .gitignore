@@ -10,9 +10,12 @@ venv/
 .env
 
 # Base de datos
-db.sqlite3
-db.sqlite3-journal
-db.sqlite3-wal
+# house_votes_db.sqlite3
+# house_votes_db.sqlite
+house_votes_db.sqlite3-journal
+house_votes_db.sqlite-journal
+house_votes_db.sqlite3-wal
+house_votes_db.sqlite-wal
 
 # Django
 *.log
