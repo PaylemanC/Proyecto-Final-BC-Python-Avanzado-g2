@@ -20,3 +20,18 @@ def generate_project_type_chart(data):
     )
     
     return chart.to_html()
+
+def generate_law_conversion_line_chart(data):
+    df = pd.DataFrame(data)
+    
+    chart = alt.Chart(df).mark_line().encode(
+        x='action_date:T', 
+        y='total:Q',        
+        tooltip=['action_date:T', 'total:Q'],  
+    ).properties(
+        width=600,
+        height=300
+    )
+    
+    # Devuelve el gráfico como HTML
+    return chart.to_html()
