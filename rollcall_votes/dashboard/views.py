@@ -7,20 +7,16 @@ from datetime import datetime
 
 def dashboard(request):
     members_count = Members.objects.count()
-    bills_by_type = Bills.objects.values('type').annotate(total=Count('type')) # [{'type': 'S', 'total': 50}, {'type': 'HR', 'total': 60}, {'type': 'SRES', 'total': 90}]
     laws_count = Bills.objects.filter(action_text__startswith="Became Public Law No:").count()    
     last_bills = Bills.objects.all().order_by('-action_date')[:10]
     
-    bill_type_chart = generate_project_type_chart(bills_by_type)
     law_conversion_data = group_laws_by_date()
     law_conversion_chart = generate_law_conversion_line_chart(law_conversion_data)
     
     return render(request, 'dashboard.html', {
         'members_count': members_count,
-        'bills_by_type': bills_by_type,
         'laws_count': laws_count,
         'last_bills': last_bills,
-        'bill_type_chart': bill_type_chart,
         'law_conversion_chart': law_conversion_chart
     })  
 
@@ -36,9 +32,12 @@ def member_list(request):
     
 def bill_list(request):
     bills = Bills.objects.all().order_by('-action_date')
+    bills_by_type = Bills.objects.values('type').annotate(total=Count('type')) # [{'type': 'S', 'total': 50}, {'type': 'HR', 'total': 60}, {'type': 'SRES', 'total': 90}]
+    bill_type_chart = generate_project_type_chart(bills_by_type)
     
     return render(request, 'bill_list.html', {
-        'bills': bills
+        'bills': bills,
+        'bill_type_chart': bill_type_chart,
     })
 
 def group_laws_by_date():

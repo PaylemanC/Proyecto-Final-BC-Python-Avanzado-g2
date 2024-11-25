@@ -8,17 +8,6 @@
 
 <p>Members count: {{members_count}}</p>
 <p>{{laws_count}} Bills became law</p>
-<p>Bills by type</p>
-<ul>
-    {% for bill in bills_by_type %}
-      <li>{{ bill.type }}: {{ bill.total }}</li>
-    {% endfor %}
-</ul>
-
-{% comment %} <h2>Projects by Type</h2>
-<div id="bill_type_chart">
-    {{ bill_type_chart|safe }}
-</div>  {% endcomment %}
 
 <h2>Law Conversion Over Time</h2>
 <div id="law_conversion_chart">
