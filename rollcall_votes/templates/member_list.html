@@ -5,12 +5,12 @@
 
 {% block content %}
 
-<h2 class="member_list-title">Members</h2>
-
-<div id="members_type_chart">
-  {{members_type_chart|safe }}
-</div>  
-
+<div class="section-start">
+  <h2>All Members</h2>  
+  <div id="members_type_chart" class="circle-chart">
+    {{members_type_chart|safe }}
+  </div>  
+</div>
 <div class="card-members--container">
     {% for member in members %}
     <div class="card-members">

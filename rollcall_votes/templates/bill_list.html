@@ -3,10 +3,12 @@
 {% block title %}Bills{% endblock %}
 
 {% block content %}
-<h2>Bills by Type</h2>
-<div id="bill_type_chart">
-    {{ bill_type_chart|safe }}
-</div>  
+<div class="section-start">
+    <h2>Bills by Type</h2>
+    <div id="bill_type_chart" class="circle-chart">
+        {{ bill_type_chart|safe }}
+    </div>  
+</div>
 
 <div class="table-bills">
     <h2>All Bills</h2>

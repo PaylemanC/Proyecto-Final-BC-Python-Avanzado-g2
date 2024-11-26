@@ -151,6 +151,10 @@ h2 {
     padding: 12px 24px;
 }
 
+.circle-chart {
+    width: 400px;
+}
+
 .table-bills {
     width: 100%; 
 }
@@ -175,9 +179,15 @@ h2 {
     width: 20%; 
 }
 
-.member_list-title {
-    margin: 16px 0;
+.section-start {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     text-align: center;
+}
+
+.section-start h2 {
+    margin: 16px 0;
     font-size: 2.4rem;
     font-weight: bold;
 }
