@@ -1,9 +1,8 @@
 from django.shortcuts import render
 from data.models import Members, Bills
 from django.db.models import Count
-from graphics.views import generate_project_type_chart, generate_law_conversion_line_chart
+from graphics.views import generate_project_type_chart, generate_law_conversion_line_chart, generate_party_chart
 from datetime import datetime
-
 
 def dashboard(request):
     members_count = Members.objects.count()
@@ -25,10 +24,22 @@ def member_list(request):
     members = Members.objects.all()
     members_count = Members.objects.count()
     
+    party_distribution = (
+        members.values('party_code__name')  
+        .annotate(total=Count('member_id'))  
+        .order_by('party_code__name') 
+    )
+    
+    chart_data = [{'party_name': entry['party_code__name'], 'total': entry['total']} for entry in party_distribution]
+    
+    members_type_chart = generate_party_chart(chart_data)
+    
     return render(request, 'member_list.html', {
         'members': members,
-        'members_count': members_count
+        'members_count': members_count,
+        'members_type_chart': members_type_chart
     })
+    
     
 def bill_list(request):
     bills = Bills.objects.all().order_by('-action_date')
