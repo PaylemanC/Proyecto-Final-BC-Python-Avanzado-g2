@@ -3,39 +3,39 @@
 {% block title %}Bills{% endblock %}
 
 {% block content %}
-
-<h1>All Bills</h1>
-
 <h2>Bills by Type</h2>
 <div id="bill_type_chart">
     {{ bill_type_chart|safe }}
 </div>  
 
-<table class="table table-hover">
-    <thead class="thead-light">
-        <tr>
-            <th class="border-bottom">#</th>
-            <th class="border-bottom">Type</th>
-            <th class="border-bottom">Description</th>
-            <th class="border-bottom">Last update</th>
-            <th class="border-bottom">Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for bill in bills %}
-        <tr>
-            <td>{{ bill.number }}</td>
-            <td>{{ bill.type }}</td>
-            <td>{{ bill.description }}</td>
-            <td>{{ bill.action_date }}</td>
-            <td>{{ bill.action_text }}</td>
-        </tr>
-        {% empty %}
-        <tr>
-            <td colspan="3">No bills found</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<div class="table-bills">
+    <h2>All Bills</h2>
+    <table class="table table-hover">
+        <thead class="thead-light">
+            <tr>
+                <th class="border-bottom">#</th>
+                <th class="border-bottom">Type</th>
+                <th class="border-bottom">Description</th>
+                <th class="border-bottom">Last update</th>
+                <th class="border-bottom">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for bill in bills %}
+            <tr>
+                <td>{{ bill.number }}</td>
+                <td>{{ bill.type }}</td>
+                <td>{{ bill.description }}</td>
+                <td>{{ bill.action_date }}</td>
+                <td>{{ bill.action_text }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="3">No bills found</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 
 {% endblock %}

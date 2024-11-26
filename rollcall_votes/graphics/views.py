@@ -53,7 +53,7 @@ def generate_law_conversion_line_chart(data):
             )
 
     law_line_chart = (area + line).properties(
-        width=600,
+        width=700,
         height=300
     )
     

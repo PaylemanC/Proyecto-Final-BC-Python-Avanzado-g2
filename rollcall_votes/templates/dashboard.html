@@ -1,42 +1,48 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Inicio - Dashboard{% endblock %}
-{% block styles %}<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">{% endblock styles %}
+{% block title %}Dashboard{% endblock %}
 
 {% block content %}
 
-<p>Members count: {{members_count}}</p>
-<p>{{laws_count}} Bills became law</p>
-
-<h2>Law Conversion Over Time</h2>
-<div id="law_conversion_chart">
-    {{ law_conversion_chart|safe }}
+<div class="dashboard--container">
+    <div class="dashboard_general">    
+        <div class="dashboard_general--counts">
+            <div><p>{{members_count}}</p><p>active members</p></div>
+            <div><p>{{laws_count}}</p><p>bills became law</p></div>    
+        </div>
+        <div class="dashboard_general--chart">
+            <h2>*Law Conversion Over Time</h2>
+            <div id="law_conversion_chart">
+                {{ law_conversion_chart|safe }}
+            </div>
+        </div> 
+    </div>
+    <div class="table-resume-bills">
+        <h2>Last updated bills:</h2>
+        <table class="dashboard-table table table-hover">
+            <thead class="thead-light">
+                <tr>
+                    <th class="border-bottom">#</th>
+                    <th class="border-bottom">Description</th>
+                    <th class="border-bottom">Last update</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for bill in last_bills %}
+                <tr>
+                    <td>{{ bill.number }}</td>
+                    <td>{{ bill.description }}</td>
+                    <td>{{ bill.action_text }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3">No bills found</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>   
+    </div>        
 </div>
 
-<p>Last updated bills:</p>
-<table class="table table-hover">
-    <thead class="thead-light">
-        <tr>
-            <th class="border-bottom">#</th>
-            <th class="border-bottom">Type</th>
-            <th class="border-bottom">Last update</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for bill in last_bills %}
-        <tr>
-            <td>{{ bill.number }}</td>
-            <td>{{ bill.description }}</td>
-            <td>{{ bill.action_text }}</td>
-        </tr>
-        {% empty %}
-        <tr>
-            <td colspan="3">No bills found</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-
-
-{% endblock %}
+{% endblock content %}
