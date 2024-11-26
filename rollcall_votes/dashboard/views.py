@@ -55,6 +55,9 @@ def bill_list(request):
         'bills': bills,
         'bill_type_chart': bill_type_chart,
     })
+    
+
+'''----------------------Helper Functions----------------------'''
 
 
 def group_laws_by_date():

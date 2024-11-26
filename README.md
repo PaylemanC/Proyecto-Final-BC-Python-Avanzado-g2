@@ -61,6 +61,15 @@ python manage.py runserver
 
 ```
 
+### Correr tests unitarios
+Para la app de graphics, verificar que los gráficos se generan correctamente:
+
+```bash
+cd rollcall_votes
+
+python manage.py test graphics
+```
+
 ## Correr extracción de datos*
 
 Debido a que la base de datos ya se encuentra inicializada e incluida en la raíz del repositorio, “`house_votes_db.sqlite`", este paso es *__opcional__. Sin embargo, para corroborrar y ver el proceso de extracción de datos (ETL), se pueden seguir los siguientes pasos:
