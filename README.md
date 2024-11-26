@@ -13,6 +13,7 @@ Un Dashboard interactivo para explorar bills/proyectos legislativos y miembros d
 
 ```bash
 git clone https://github.com/PaylemanC/Proyecto-Final-BC-Python-Avanzado-g2.git
+
 ```
 
 2. Crea y activa tu entorno virtual:
@@ -28,12 +29,14 @@ cd ..
 
 # Activación en Linux & MacOS
 source venv/bin/activate
+
 ```
 
 3. Instala las dependencias desde el directorio raíz:
 
 ```bash
 pip install -r requirements.txt 
+
 ```
 
 ### Tecnologías utilizadas
@@ -47,7 +50,7 @@ pip install -r requirements.txt
 | **Dotenv (Python)** | Manejo de variables de entorno.  |
 | **Requests** | Peticiones GET a la API.  |
 
-### Levantar Web
+## Levantar Web
 
 Para ver el Dashboard y proyecto en general:
 
@@ -55,14 +58,14 @@ Para ver el Dashboard y proyecto en general:
 cd rollcall_votes
 
 python manage.py runserver
+
 ```
 
-### Correr extracción de datos*
+## Correr extracción de datos*
 
 Debido a que la base de datos ya se encuentra inicializada e incluida en la raíz del repositorio, “`house_votes_db.sqlite`", este paso es *__opcional__. Sin embargo, para corroborrar y ver el proceso de extracción de datos (ETL), se pueden seguir los siguientes pasos:
 
 1. Elimina el archivo de la base de datos `house_votes_db.sqlite`.
-
 2. Crea un archivo `.env` a la altura del archivo `.env-dist`, con la siguiente estructura:
 
 ```bash
@@ -70,6 +73,7 @@ CONGRESS_API_KEY="API KEY (STR)"
 ENVIRONMENT="The environment, being either PROD or DEV (STR)" 
 CONGRESS="The congress number (INT)" 
 SETUP_SCHEMA="Whether to setup the schema in the database (BOOL)"
+
 ```
 
 **Recomendación**:
@@ -79,6 +83,7 @@ CONGRESS_API_KEY="EE6i06Z939y8B9bzhLcgsTT93faX1SP5CHDr34Ze"
 ENVIRONMENT=DEBUG
 SETUP_SCHEMA=TRUE
 CONGRESS=117
+
 ```
 
 Consideraciones:
@@ -92,4 +97,38 @@ Consideraciones:
 
 ```bash
 python -m scraper.main_scraper
+
 ```
+
+## Estructura del Proyecto
+
+Carpetas y archivos relevantes:
+
+```bash
+/
+|-- rollcall_votes/
+|   |-- dashboard/
+|   |-- data/
+|   |-- graphics/
+|   |-- rollcall_votes/
+|   |-- static/
+|   |-- templates/
+|-- scraper/
+|-- house_votes_db.sqlite
+|-- requirements.txt
+
+
+```
+
+* __rollcall_votes__: Proyecto de Django.
+   * **dashboard**: Contiene las vistas y urls de todas las páginas.
+   * **data**: Contiene los modelos que conectan a la base de datos SQLite.
+   * **graphics**: Clases que generan gráficos con Vega-Altair.
+   * __rollcall_votes__: Configuración del proyecto de Django.
+   * **static**: Archivos estáticos (CSS).
+   * **templates**: Templates HTML del Django (UI).
+
+* **scraper**: Módulo de extracción de datos.
+* __house_votes_db.sqlite__: Base de datos SQLite con los datos extraídos.
+
+Tu entorno virtual y archivo .env debe estar a la altura de la carpeta raíz.
