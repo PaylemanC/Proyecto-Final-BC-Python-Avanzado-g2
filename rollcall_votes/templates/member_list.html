@@ -9,17 +9,15 @@
 
 <div class="card-members--container">
     {% for member in members %}
-    <div class="card-members card" style="width: 18rem;">
-      <img src="{{ member.image_url }}" alt="{{member.name}} Image">
-        <img src="" class="card-img-top" alt="...">
-        <p class="card-subtext">{{member.member_id}}.</p>
-          <p class="card-title">{{member.name}}</p>
-        </div>
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item">{{member.party_code.name}}</li>
-          <li class="list-group-item">{{member.state_code.name}}</li>
-        </ul>
-      </div>
+    <div class="card-members card">
+      <img src="{{ member.image_url }}" alt="{{member.name}} image">
+      <p class="card-subtext">{{member.member_id}}</p>
+      <p class="card-title">{{member.name}}</p>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">{{member.party_code.name}}</li>
+        <li class="list-group-item">{{member.state_code.name}}</li>
+      </ul>
+    </div>
     {% endfor %}
 </div>
 
