@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from data.models import Members, Bills
 from django.db.models import Count
-from graphics.views import generate_project_type_chart, generate_law_conversion_line_chart, generate_party_chart
+from graphics.views import ProjectTypeChart, PartyChart, LawConversionLineChart
 from datetime import datetime
 
 def dashboard(request):
@@ -10,7 +10,8 @@ def dashboard(request):
     last_bills = Bills.objects.all().order_by('-action_date')[:10]
     
     law_conversion_data = group_laws_by_date()
-    law_conversion_chart = generate_law_conversion_line_chart(law_conversion_data)
+    law_chart = LawConversionLineChart()
+    law_conversion_chart = law_chart.generate_chart(law_conversion_data)
     
     return render(request, 'dashboard.html', {
         'members_count': members_count,
@@ -32,7 +33,8 @@ def member_list(request):
     
     chart_data = [{'party_name': entry['party_code__name'], 'total': entry['total']} for entry in party_distribution]
     
-    members_type_chart = generate_party_chart(chart_data)
+    party_chart = PartyChart()
+    members_type_chart = party_chart.generate_chart(chart_data)
     
     return render(request, 'member_list.html', {
         'members': members,
@@ -43,13 +45,17 @@ def member_list(request):
     
 def bill_list(request):
     bills = Bills.objects.all().order_by('-action_date')
-    bills_by_type = Bills.objects.values('type').annotate(total=Count('type')) # [{'type': 'S', 'total': 50}, {'type': 'HR', 'total': 60}, {'type': 'SRES', 'total': 90}]
-    bill_type_chart = generate_project_type_chart(bills_by_type)
+    bills_by_type = Bills.objects.values('type').annotate(total=Count('type')) 
+    chart_data = [{'type': entry['type'], 'total': entry['total']} for entry in bills_by_type]
+    
+    project_chart = ProjectTypeChart()
+    bill_type_chart = project_chart.generate_chart(chart_data)
     
     return render(request, 'bill_list.html', {
         'bills': bills,
         'bill_type_chart': bill_type_chart,
     })
+
 
 def group_laws_by_date():
     laws = Bills.objects.filter(action_text__startswith="Became Public Law No:")
