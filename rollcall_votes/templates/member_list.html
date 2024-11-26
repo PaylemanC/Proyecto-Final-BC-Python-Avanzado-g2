@@ -5,17 +5,19 @@
 
 {% block content %}
 
-<h1>Members</h1>
+<h2 class="member_list-title">Members</h2>
 
 <div class="card-members--container">
     {% for member in members %}
-    <div class="card-members card">
-      <img src="{{ member.image_url }}" alt="{{member.name}} image">
-      <p class="card-subtext">{{member.member_id}}</p>
-      <p class="card-title">{{member.name}}</p>
-      <ul class="list-group list-group-flush">
-        <li class="list-group-item">{{member.party_code.name}}</li>
-        <li class="list-group-item">{{member.state_code.name}}</li>
+    <div class="card-members">
+      <div class="card_image--container">
+        <img src="{{ member.image_url }}" alt="{{member.name}} image" class="card-member_image">
+      </div>
+      <p class="card_member-id">{{member.member_id}}</p>
+      <p class="card_member-name">{{member.name}}</p>
+      <ul class="card_data">
+        <li class="card_member-state">{{member.party_code.name}}</li>
+        <li class="card_member-party">{{member.state_code.name}}</li>
       </ul>
     </div>
     {% endfor %}
