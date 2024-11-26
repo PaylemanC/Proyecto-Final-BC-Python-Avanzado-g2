@@ -1,3 +1,17 @@
+"""
+Main entry point for the application to load data into the database.
+
+Responsibilities:
+- Establishes a database connection using the `DBConnection` class.
+- Optionally sets up the database schema by executing SQL from the provided schema file.
+- Fetches and processes data from the Congress API, including information about congress, bills, and members.
+- Loads the fetched data into the database, ensuring data transformations where necessary.
+- Manages database transactions, committing successful operations and rolling back in case of errors.
+
+Note:
+This file is intended to be executed directly and should not be imported as a module unless specifically required. 
+Also, you require an ".env" file (README for more details) to run this file.
+"""
 from loguru import logger
 from .sql_connection import DBConnection
 from config import CONGRESS_API_KEY, CONGRESS, SETUP_SCHEMA

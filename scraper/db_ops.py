@@ -1,3 +1,11 @@
+'''
+This module provides utility functions to manage database operations for the project. 
+
+Responsibilities:
+- Initialize the database schema using an SQL script.
+- Load data into the database from pandas DataFrames, including handling conflicts and updates.
+- Functions are designed to work with a database connection and execute bulk operations efficiently.
+'''
 from loguru import logger
 from logger_config import log_level, log_format, log_output
 
@@ -29,6 +37,15 @@ def load_congress_data_to_db(
 ):
     """
     Load the congress data to the database
+    
+    Args:
+        db_connection: The database connection object.
+        congress_df (DataFrame): A pandas DataFrame containing Congress session data with the following columns:
+            - congress_id
+            - session
+            - number
+            - start_date
+            - end_date
     """
     values = [tuple(row) for row in congress_df.values]
     logger.info(f"Loading {len(values)} records to the 'congress' table")
@@ -49,7 +66,16 @@ def load_members_data_to_db(
     members_df
 ):
     """
-    Load the members data to the database
+    Load the members data to the database.
+    
+    Args:
+        db_connection: The database connection object.
+        members_df (DataFrame): A pandas DataFrame containing Congress member data with the following columns:
+            - member_id
+            - name
+            - image_url
+            - party
+            - state
     """
     values = [
         (
@@ -81,6 +107,15 @@ def load_bills_data_to_db(
 ):
     """
     Load the bills data to the database.
+    
+    Args:
+        db_connection: The database connection object.
+        bills_df (DataFrame): A pandas DataFrame containing bill data with the following columns:
+            - bill_id
+            - number
+            - type
+            - description
+            - action_date
     """
     values = [
         (

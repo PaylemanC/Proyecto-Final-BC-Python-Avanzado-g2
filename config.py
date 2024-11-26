@@ -1,3 +1,13 @@
+"""
+Configuration module for loading environment variables.
+
+This module uses the `dotenv` package to load environment variables from a `.env` file if it exists.
+Attributes:
+    ENVIRONMENT (str): The environment in which the application is running. Defaults to 'PROD'.
+    SETUP_SCHEMA (bool): A flag indicating whether to set up the schema. Defaults to False.
+    CONGRESS (str): The congress number. Defaults to '118'.
+    CONGRESS_API_KEY (str): The API key for accessing congress data.
+"""
 import os
 from dotenv import load_dotenv
 

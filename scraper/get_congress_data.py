@@ -54,7 +54,6 @@ def get_congress_info(
             "end_date": session_end_date
         }
         congress_sessions_data.append(session_data)
-    logger.debug(f"Congress sessions data: {congress_sessions_data}")
         
     congress_df = pd.DataFrame(congress_sessions_data).drop_duplicates()
     return congress_df
